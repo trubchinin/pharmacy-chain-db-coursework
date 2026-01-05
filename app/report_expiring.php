@@ -1,6 +1,9 @@
 <?php
 require __DIR__ . '/lib.php';
 ensure_logged_in();
+if (!in_array($_SESSION['db_user'], ['root', 'u_admin', 'u_pharm'])) {
+    die('Доступ заборонено: у вас недостатньо прав для перегляду цієї сторінки.');
+}
 $rows = [];
 $days = (int)($_GET['days'] ?? 365); // за замовчуванням 365 днів для демо
 if (isset($_GET['run'])) {

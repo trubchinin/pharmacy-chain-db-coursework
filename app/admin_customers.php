@@ -1,6 +1,9 @@
 <?php
 require __DIR__ . '/lib.php';
 ensure_logged_in();
+if (!in_array($_SESSION['db_user'], ['root', 'u_admin', 'u_auditor'])) {
+    die('Доступ заборонено: у вас недостатньо прав для перегляду цієї сторінки.');
+}
 $rows = db()->query("SELECT id, full_name, phone, email, card_id FROM v_customer_secure ORDER BY id LIMIT 100")->fetchAll();
 render_header('Адмін: Клієнти');
 ?>

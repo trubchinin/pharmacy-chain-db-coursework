@@ -1,6 +1,9 @@
 <?php
 require __DIR__ . '/lib.php';
 ensure_logged_in();
+if (!in_array($_SESSION['db_user'], ['root', 'u_admin', 'u_pharm', 'u_cashier'])) {
+    die('Доступ заборонено: у вас недостатньо прав для створення продажу.');
+}
 $msg = null; $err = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {

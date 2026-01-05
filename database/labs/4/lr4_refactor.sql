@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS SalesFactDaily (
   PRIMARY KEY (d, pharmacy_id, product_id),
   KEY idx_sfd_prod (product_id),
   KEY idx_sfd_pharm (pharmacy_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Процедура побудови факту за інтервал дат [d_from, d_to).
 DELIMITER //

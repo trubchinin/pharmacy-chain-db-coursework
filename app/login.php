@@ -2,11 +2,15 @@
 require __DIR__ . '/lib.php';
 $error = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (login($_POST['user'] ?? '', $_POST['pass'] ?? '')) {
-        header('Location: /');
-        exit;
-    } else {
-        $error = 'Помилка автентифікації';
+    try {
+        if (login($_POST['user'] ?? '', $_POST['pass'] ?? '')) {
+            header('Location: index.php');
+            exit;
+        } else {
+            $error = 'Помилка автентифікації';
+        }
+    } catch (Throwable $e) {
+        $error = 'Помилка БД: ' . $e->getMessage();
     }
 }
 render_header('Вхід');

@@ -9,7 +9,7 @@ SET time_zone = '+00:00';
 DROP DATABASE IF EXISTS pharmacy_chain;
 CREATE DATABASE IF NOT EXISTS pharmacy_chain
   CHARACTER SET utf8mb4
-  COLLATE utf8mb4_0900_ai_ci;
+  COLLATE utf8mb4_general_ci;
 USE pharmacy_chain;
 
 -- -----------------------------------------------------
@@ -21,7 +21,7 @@ CREATE TABLE Region (
   name VARCHAR(100) NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY uq_region_name (name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE City (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -31,7 +31,7 @@ CREATE TABLE City (
   KEY fk_city_region (region_id),
   CONSTRAINT fk_city_region FOREIGN KEY (region_id) REFERENCES Region(id)
     ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE Pharmacy (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -45,14 +45,14 @@ CREATE TABLE Pharmacy (
   KEY fk_pharmacy_city (city_id),
   CONSTRAINT fk_pharmacy_city FOREIGN KEY (city_id) REFERENCES City(id)
     ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE Role (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   name VARCHAR(80) NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY uq_role_name (name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE Employee (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -69,7 +69,7 @@ CREATE TABLE Employee (
   CONSTRAINT fk_employee_role FOREIGN KEY (role_id) REFERENCES Role(id)
     ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT chk_employee_active CHECK (is_active IN (0,1))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE Manufacturer (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -77,14 +77,14 @@ CREATE TABLE Manufacturer (
   country VARCHAR(80) NULL,
   PRIMARY KEY (id),
   UNIQUE KEY uq_manufacturer_name (name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE DosageForm (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   name VARCHAR(80) NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY uq_dosageform_name (name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE Product (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -107,7 +107,7 @@ CREATE TABLE Product (
     ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT chk_product_rx CHECK (is_rx IN (0,1)),
   CONSTRAINT chk_product_ctrl CHECK (is_controlled IN (0,1))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE Supplier (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -116,7 +116,7 @@ CREATE TABLE Supplier (
   phone VARCHAR(32) NULL,
   PRIMARY KEY (id),
   UNIQUE KEY uq_supplier_tax (tax_no)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE Batch (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -135,7 +135,7 @@ CREATE TABLE Batch (
   CONSTRAINT fk_batch_supplier FOREIGN KEY (supplier_id) REFERENCES Supplier(id)
     ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT chk_batch_dates CHECK (exp_date > mfg_date)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- 2. Loyalty & Customers
@@ -148,7 +148,7 @@ CREATE TABLE LoyaltyTier (
   PRIMARY KEY (id),
   UNIQUE KEY uq_loyaltytier_name (name),
   CONSTRAINT chk_loyalty_discount CHECK (discount_pct >= 0 AND discount_pct <= 50)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE LoyaltyCard (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -160,7 +160,7 @@ CREATE TABLE LoyaltyCard (
   KEY fk_loyaltycard_tier (tier_id),
   CONSTRAINT fk_loyaltycard_tier FOREIGN KEY (tier_id) REFERENCES LoyaltyTier(id)
     ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE Customer (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -174,7 +174,7 @@ CREATE TABLE Customer (
   KEY fk_customer_card (card_id),
   CONSTRAINT fk_customer_card FOREIGN KEY (card_id) REFERENCES LoyaltyCard(id)
     ON UPDATE CASCADE ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- 3. Inventory in pharmacies
@@ -191,7 +191,7 @@ CREATE TABLE PharmacyStock (
   CONSTRAINT fk_pharmacystock_batch FOREIGN KEY (batch_id) REFERENCES Batch(id)
     ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT chk_stock_qty_nonneg CHECK (qty >= 0)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- 4. Prescriptions
@@ -209,7 +209,7 @@ CREATE TABLE Prescription (
   CONSTRAINT fk_prescription_customer FOREIGN KEY (customer_id) REFERENCES Customer(id)
     ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT chk_prescr_dates CHECK (valid_to >= issued_at)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE PrescriptionItem (
   prescription_id BIGINT UNSIGNED NOT NULL,
@@ -225,7 +225,7 @@ CREATE TABLE PrescriptionItem (
     ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT chk_prescitem_qty CHECK (qty > 0),
   CONSTRAINT chk_prescitem_repeats CHECK (repeats_left >= 0)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- 5. Sales and promotions
@@ -251,7 +251,7 @@ CREATE TABLE Sale (
     ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT fk_sale_customer FOREIGN KEY (customer_id) REFERENCES Customer(id)
     ON UPDATE CASCADE ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE SaleItem (
   sale_id BIGINT UNSIGNED NOT NULL,
@@ -276,7 +276,7 @@ CREATE TABLE SaleItem (
     REFERENCES PrescriptionItem(prescription_id, product_id)
     ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT chk_saleitem_qty CHECK (qty > 0)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Enforce pairwise NULL/not-NULL for prescription columns via triggers (MySQL 8.0 limitation on CHECK)
 DELIMITER //
@@ -307,7 +307,7 @@ CREATE TABLE Promotion (
   rules JSON NULL,
   PRIMARY KEY (id),
   CONSTRAINT chk_promo_dates CHECK (end_at >= start_at)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE SalePromotion (
   sale_id BIGINT UNSIGNED NOT NULL,
@@ -318,7 +318,7 @@ CREATE TABLE SalePromotion (
     ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT fk_salepromo_promo FOREIGN KEY (promotion_id) REFERENCES Promotion(id)
     ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- 6. Supplier orders and deliveries
@@ -337,7 +337,7 @@ CREATE TABLE SupplierOrder (
     ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT fk_supporder_supplier FOREIGN KEY (supplier_id) REFERENCES Supplier(id)
     ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE SupplierOrderItem (
   supplier_order_id BIGINT UNSIGNED NOT NULL,
@@ -351,7 +351,7 @@ CREATE TABLE SupplierOrderItem (
   CONSTRAINT fk_supporderitem_product FOREIGN KEY (product_id) REFERENCES Product(id)
     ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT chk_supporderitem_qty CHECK (qty > 0)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE Delivery (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -362,7 +362,7 @@ CREATE TABLE Delivery (
   KEY fk_delivery_order (supplier_order_id),
   CONSTRAINT fk_delivery_order FOREIGN KEY (supplier_order_id) REFERENCES SupplierOrder(id)
     ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE DeliveryItem (
   delivery_id BIGINT UNSIGNED NOT NULL,
@@ -375,7 +375,7 @@ CREATE TABLE DeliveryItem (
   CONSTRAINT fk_deliveryitem_batch FOREIGN KEY (batch_id) REFERENCES Batch(id)
     ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT chk_deliveryitem_qty CHECK (qty_received > 0)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- -----------------------------------------------------
 -- 7. Returns and audit
@@ -391,7 +391,7 @@ CREATE TABLE `Return` (
   KEY fk_return_sale (sale_id),
   CONSTRAINT fk_return_sale FOREIGN KEY (sale_id) REFERENCES Sale(id)
     ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE AuditLog (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -408,7 +408,7 @@ CREATE TABLE AuditLog (
     ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT fk_audit_product FOREIGN KEY (product_id) REFERENCES Product(id)
     ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Helpful view (inspection during defense)
 CREATE OR REPLACE VIEW v_expiring_batches AS
